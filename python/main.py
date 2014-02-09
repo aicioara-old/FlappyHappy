@@ -8,28 +8,31 @@ def jump():
 def loadBirds():
 	
 	global birds
+	global feather
 
 	birds = []
-
 	for f in os.listdir(os.getcwd() + "/data/birds"):
 		f = "data/birds/" +  f
 		birds.append(autopy.bitmap.Bitmap.open(f))
 
+	feather = autopy.bitmap.Bitmap.open("data/feather.png")
+
 
 def getBirdPosition():
 	screen = autopy.bitmap.capture_screen()
+	position = screen.find_bitmap(feather, 0.02)
+	return position
+	
+	
+def main():
+	loadBirds()
+	while 1:
+		print getBirdPosition()
+		time.sleep(1)
 
-	for bird in birds:
-		position = screen.find_bitmap(bird)
-		if position:
-			return position
 
-
-def loop():
+def screenshot():
 	x = 1
-
-
-
 	while 1:
 		# autopy.bitmap.capture_screen().save('screengrab.png')
 		name = "screenshot" + str(x) + ".png"
@@ -39,30 +42,17 @@ def loop():
 		autopy.bitmap.capture_screen().save(name)
 
 		time.sleep(0.1)
-	
-def loop2():
-	while 1:
-		print getBirdPosition()
-		# time.sleep(1)
 
 def test():
-	bird11 = autopy.bitmap.Bitmap.open('data/bird11.png')
-	bird12 = autopy.bitmap.Bitmap.open('data/bird12.png')
-	bird13 = autopy.bitmap.Bitmap.open('data/bird13.png')
-	bird14 = autopy.bitmap.Bitmap.open('data/bird14.png')
-	bird15 = autopy.bitmap.Bitmap.open('data/bird15.png')
-	bird16 = autopy.bitmap.Bitmap.open('data/bird16.png')
-	bird21 = autopy.bitmap.Bitmap.open('data/bird21.png')
-	bird22 = autopy.bitmap.Bitmap.open('data/bird22.png')
-	bird23 = autopy.bitmap.Bitmap.open('data/bird23.png')
-	bird4 = autopy.bitmap.Bitmap.open('data/bird4.png')
-	screen2 = autopy.bitmap.Bitmap.open('screenshot8.png')
-
-	print screen2.find_bitmap(bird12)
+	feather = autopy.bitmap.Bitmap.open('data/feather.png')
+	for bird in birds:
+		position = bird.find_bitmap(feather, 0.01)
+		if position:
+			print bird
 
 
 # loadBirds()
 
 
-loadBirds()
-loop2()
+main()
+
